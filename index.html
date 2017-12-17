@@ -42,7 +42,7 @@
         function makeHttpObject() {
             try {
                 var url = window.location.href;
-                googleURL = decodeURIComponent((url.substring(url.indexOf("googleURL"),url.length)).replace("googleURL=",""));
+                googleURL = decodeURIComponent((url.substring(url.indexOf("GoogleURL"),url.length)).replace("GoogleURL=",""));
                 console.log(googleURL)
                 return new XMLHttpRequest();
 
