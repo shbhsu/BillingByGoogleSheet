@@ -32,16 +32,17 @@
     <script>
 
         function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
+            if (!url)
           
-            return decodeURIComponent((url.substring(url.indexOf("GoogleURL"),url.length)).replace("GoogleURL=",""));
+            return 
         }
 
         var googleURL = '';
 
         function makeHttpObject() {
             try {
-                googleURL = getParameterByName("GoogleURL");
+                var url = window.location.href;
+                googleURL = decodeURIComponent((url.substring(url.indexOf("googleURL"),url.length)).replace("googleURL=",""));
                 console.log(googleURL)
                 return new XMLHttpRequest();
 
