@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta charset="UTF-8">
 
-     <!-- TODO add manifest here -->
-  <link rel="manifest" href="manifest.json">
-  <!-- Add to home screen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="饅頭記帳">
-  <link rel="apple-touch-icon" href="images/icon-128x128.png">
-  <meta name="msapplication-TileImage" content="images/icon-128x128.png">
-  <meta name="msapplication-TileColor" content="#2F3BA2">
+    <!-- TODO add manifest here -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="饅頭記帳">
+    <link rel="apple-touch-icon" href="images/icon-128x128.png">
+    <meta name="msapplication-TileImage" content="images/icon-128x128.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
@@ -71,6 +71,7 @@
         var googleURL = '';
 
         function makeHttpObject() {
+            $('#tab1').click();
             try {
                 var url = window.location.href;
                 var key = location.search.replace("?Key=", "");
@@ -259,15 +260,15 @@
 
 
             <div class="row">
-                 
+
                 <div class='col-xs-12'>
                     <div class="form-group">
-                        日期：  
+                        日期：
                         <div class="btn-group" role="group" style="float: right;padding-bottom: 10px;">
-                                <button type="button" class="btn btn-info" onclick="$('#SDT').val(moment().format('YYYY-MM-DD'));$('#EDT').val(moment().format('YYYY-MM-DD'));initObject();" >今天</button>
-                                <button type="button" class="btn btn-primary" onclick="$('#SDT').val(moment().format('YYYY-MM')+'-01');$('#EDT').val(moment().add(1,'M').format('YYYY-MM')+'-01');initObject()">本月</button>
-                                <button type="button" class="btn btn-success" onclick="$('#SDT').val(moment().add(-1,'M').format('YYYY-MM')+'-01');$('#EDT').val(moment().format('YYYY-MM')+'-01');initObject()">上月</button>
-                              </div>
+                            <button type="button" class="btn btn-info" onclick="$('#SDT').val(moment().format('YYYY-MM-DD'));$('#EDT').val(moment().format('YYYY-MM-DD'));initObject();">今天</button>
+                            <button type="button" class="btn btn-primary" onclick="$('#SDT').val(moment().format('YYYY-MM')+'-01');$('#EDT').val(moment().add(1,'M').format('YYYY-MM')+'-01');initObject()">本月</button>
+                            <button type="button" class="btn btn-success" onclick="$('#SDT').val(moment().add(-1,'M').format('YYYY-MM')+'-01');$('#EDT').val(moment().format('YYYY-MM')+'-01');initObject()">上月</button>
+                        </div>
                     </div>
                 </div>
 
@@ -295,7 +296,7 @@
                     </div>
                 </div>
 
-              
+
 
             </div>
 
@@ -303,11 +304,14 @@
 
                 <ul class="nav nav-tabs">
                     <li>
-                        <a href="#Rtab1">支出明細</a>
+                        <a id='tab1' href="#Rtab1">支出明細</a>
                     </li>
                     <li>
                         <a href="#Rtab2">支出統計圖</a>
                     </li>
+                    <!-- <li>
+                        <a href="#Rtab3">饅頭數</a>
+                    </li> -->
 
                 </ul>
 
@@ -341,6 +345,13 @@
                         </div>
 
                     </div>
+
+
+                    <div id="Rtab3" class="tab_content">
+                        
+
+
+                    </div>
                 </div>
 
 
@@ -356,7 +367,6 @@
         <!-- /container -->
 
     </main>
-
 
 
     <!-- Uncomment the line below when ready to test with fake data -->
