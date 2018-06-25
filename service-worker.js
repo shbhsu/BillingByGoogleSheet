@@ -2,7 +2,18 @@
 var dataCacheName = 'gooshe-v1';
 var cacheName = 'gooshe-final-1';
 var filesToCache = [
- 
+  'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
+  '/js/cookie.js',
+  '/js/datatable.js',
+  '/js/datetime.js',
+  '/js/hichart.js',
+  '/js/jquery.js',
+  '/js/moment.js',
+
+  '/style/bootstrap-theme.css',
+  'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
+  '/style/datatable.css',
+  '/style/datepicker.css',
 
   
 ];
