@@ -10,7 +10,7 @@
       "sizes": "256x256",
       "type": "image/png"
     }],
-  "start_url": "/BillingByGoogleSheet/index.html?Key=1Rkkas5By3JLjXLkmT9yRfQ7LTkDRfHRz88kw64zXCw0",
+  "start_url": "/BillingByGoogleSheet/index.html",
   "display": "standalone",
   "background_color": "#f6aaf7",
   "theme_color": "#2F3BA2"

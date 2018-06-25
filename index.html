@@ -40,11 +40,28 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+    <script src="js/cookie.js"></script>
 
     <script>
 
+
+
         //init Date
         $(function () {
+
+            //check setting
+            if (getCookie('sheetkey') == null || getCookie('secret')==null || getCookie('username')==null || getCookie('sheetkey') == '' || getCookie('secret')=='' || getCookie('username')=='') {
+                $('#keyModalCenter').modal({
+    backdrop : "static",
+    keyboard: false
+});
+                $('#modal-sheetkey').val(  getCookie('sheetkey'))
+                $('#modal-secret').val(  getCookie('secret'))
+                $('#modal-name').val(  getCookie('username'))
+            }
+
+
+
             $("#SDT").datetimepicker({
                 format: 'YYYY-MM-DD',
                 defaultDate: new Date()
@@ -54,6 +71,13 @@
 
             $("#EDT").datetimepicker({
                 format: 'YYYY-MM-DD',
+                defaultDate: new Date()
+            }).on('dp.change', function (e) {
+                initObject();
+            });
+
+            $("#modal-date").datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
                 defaultDate: new Date()
             }).on('dp.change', function (e) {
                 initObject();
@@ -74,7 +98,7 @@
             $('#tab1').click();
             try {
                 var url = window.location.href;
-                var key = location.search.replace("?Key=", "");
+                var key = getCookie('sheetkey');
                 var sql = "select A,B,C,D where  A >=date'" + $('#SDT').val() + "' AND A<=date'" + moment($('#EDT').val()).add(1, 'd').format('YYYY-MM-DD') + "'";
                 googleURL = decodeURIComponent("https://docs.google.com/spreadsheets/d/" + key + "/gviz/tq?tqx=out:html&gid=0&tq=" + sql);
                 console.log(googleURL)
@@ -256,8 +280,12 @@
         <div class="container">
             <div class="page-header">
                 <h1>支出紀錄</h1>
-            </div>
 
+            </div>
+            <button type="button" class="btn-lg btn-danger" style="position:fixed;bottom: 15px;right: 15px;z-index: 99; border-radius: 25px;"
+                data-toggle="modal" data-target="#exampleModalCenter">
+                +
+            </button>
 
             <div class="row">
 
@@ -309,9 +337,9 @@
                     <li>
                         <a href="#Rtab2">支出統計圖</a>
                     </li>
-                    <!-- <li>
-                        <a href="#Rtab3">饅頭數</a>
-                    </li> -->
+                    <li>
+                        <a href="#Rtab3">上月比較</a>
+                    </li>
 
                 </ul>
 
@@ -348,8 +376,71 @@
 
 
                     <div id="Rtab3" class="tab_content">
-                        
+                        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
+
+
+                        <script>
+
+                            Highcharts.chart('container', {
+                                chart: {
+                                    type: 'area'
+                                },
+                                title: {
+                                    text: 'Historic and Estimated Worldwide Population Growth by Region'
+                                },
+                                subtitle: {
+                                    text: 'Source: Wikipedia.org'
+                                },
+                                xAxis: {
+                                    categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
+                                    tickmarkPlacement: 'on',
+                                    title: {
+                                        enabled: false
+                                    }
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: 'Billions'
+                                    },
+                                    labels: {
+                                        formatter: function () {
+                                            return this.value / 1000;
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    split: true,
+                                    valueSuffix: ' millions'
+                                },
+                                plotOptions: {
+                                    area: {
+                                        stacking: 'normal',
+                                        lineColor: '#666666',
+                                        lineWidth: 1,
+                                        marker: {
+                                            lineWidth: 1,
+                                            lineColor: '#666666'
+                                        }
+                                    }
+                                },
+                                series: [{
+                                    name: 'Asia',
+                                    data: [502, 635, 809, 947, 1402, 3634, 5268]
+                                }, {
+                                    name: 'Africa',
+                                    data: [106, 107, 111, 133, 221, 767, 1766]
+                                }, {
+                                    name: 'Europe',
+                                    data: [163, 203, 276, 408, 547, 729, 628]
+                                }, {
+                                    name: 'America',
+                                    data: [18, 31, 54, 156, 339, 818, 1201]
+                                }, {
+                                    name: 'Oceania',
+                                    data: [2, 2, 2, 6, 13, 30, 46]
+                                }]
+                            });</script>
 
                     </div>
                 </div>
@@ -358,15 +449,203 @@
 
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">新增支出</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">日期:</label>
+
+                                <input type='text' class="form-control" id='modal-date' />
+
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">項目:</label>
+                                <input type="text" class="form-control" id="modal-item">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">金額:</label>
+
+                                <form name="calculator">
+
+                                    <input type="text" class="form-control" name="display" style="font-size: 24px;
+                                    font-weight: bold;
+                                    color: red;" id="display" disabled>
+                                    <div class="row">
+                                        <div class='col-xs-12'>
+                                            <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="1" onclick="calculator.display.value += '1'">1</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="2" onclick="calculator.display.value += '2'">2</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="3" onclick="calculator.display.value += '3'">3</button>
+                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" value="+" onclick="calculator.display.value += '+'">+</button>
+
+                                            </div>
+                                        </div>
+                                        <div class='col-xs-12'>
+                                            <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="4" onclick="calculator.display.value += '4'">4</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="5" onclick="calculator.display.value += '5'">5</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="6" onclick="calculator.display.value += '6'">6</button>
+                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" value="-" onclick="calculator.display.value += '-'">-</button>
+
+                                            </div>
+                                        </div>
+                                        <div class='col-xs-12'>
+                                            <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="7" onclick="calculator.display.value += '7'">7</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="8" onclick="calculator.display.value += '8'">8</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="9" onclick="calculator.display.value += '9'">9</button>
+                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" value="x" onclick="calculator.display.value += '*'">x</button>
+
+                                            </div>
+                                        </div>
+                                        <div class='col-xs-12'>
+                                            <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
+                                                <button type="button" id="clear" name="clear" class="btn btn-lg  btn-info  btn-calc" value="c" onclick="calculator.display.value = ''">c</button>
+                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="0" onclick="calculator.display.value += '0'">0</button>
+                                                <button type="button" class="btn btn-lg  btn-info  btn-calc" name="doit" value="=" onclick="calculator.display.value = eval(calculator.display.value)">=</button>
+                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" name="div" value="/" onclick="calculator.display.value += '/'">/</button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
 
 
 
+                                </form>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="submitCalc()" class="btn btn-primary">送出</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="keyModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">第一次設定</h5>
+
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Sheet Key:</label>
+
+                                <input type='text' class="form-control" id='modal-sheetkey' />
+
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Add secret:</label>
+                                <input type="text" class="form-control" id="modal-secret">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">使用者名稱:</label>
+                                <input type="text" class="form-control" id="modal-name">
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="saveSetting()" class="btn btn-primary">儲存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <hr />
 
         </div>
         <!-- /container -->
 
     </main>
+
+
+    <div class="ui segment" id="loading" style="position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    z-index: 99;
+    display:none;
+    background: white;
+    opacity: 0.8;">
+        <div style="position:relative;top:30%;">
+            <img src="images/Loading_icon.gif" style="width: 100%">
+        </div>
+        <p></p>
+        <p></p>
+    </div>
+
+    <script>
+
+        function saveSetting() {//第一次設定
+            setCookie('sheetkey', $('#modal-sheetkey').val(), 40000);
+            setCookie('secret', $('#modal-secret').val(), 40000);
+            setCookie('username', $('#modal-name').val(), 40000);
+
+             $('#keyModalCenter').modal('hide');
+             initObject();
+        }
+
+        function submitCalc() {
+            $('#loading').css("display", "block");
+            var name = getCookie('username');;
+            var dt = $('#modal-date').val();
+            var item = $('#modal-item').val();
+            var price = eval($('#display').val());
+            addTosheet(name, dt, item, price);
+        }
+
+        //add to google sheet
+        let addTosheet = (name, date, item, price) => {
+
+            var addsecret = getCookie('secret');;
+
+            $.ajax({
+                type: "post",
+                data: {
+                    "method": "write",
+                    "name": name,
+                    "date": date + ':00',
+                    "item": item,
+                    "price": price
+                },
+                url: 'https://script.google.com/macros/s/' + addsecret + '/exec'// 填入網路應用程式網址
+            }).done(function () {
+
+                console.log('OK');
+                $('#exampleModalCenter').modal('hide')
+                initObject();
+                $('#loading').css("display", "none");
+            });
+
+
+        }
+    </script>
+
+
+    <style>
+        .btn-calc {
+            width: 25%;
+        }
+    </style>
+
 
 
     <!-- Uncomment the line below when ready to test with fake data -->
