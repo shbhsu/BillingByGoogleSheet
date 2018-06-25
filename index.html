@@ -581,7 +581,7 @@
     height: 100%;
     width: 100%;
     top: 0px;
-    z-index: 99;
+    z-index: 9999;
     display:none;
     background: white;
     opacity: 0.8;">
@@ -604,11 +604,23 @@
         }
 
         function submitCalc() {
-            $('#loading').css("display", "block");
+           
             var name = getCookie('username');;
             var dt = $('#modal-date').val();
             var item = $('#modal-item').val();
             var price = eval($('#display').val());
+
+            if(price==''|| price==null)
+            {
+                alert('請輸入金額');
+                return;
+            }
+            if(item==''|| item==null)
+            {
+                alert('請輸入項目');
+                return;
+            }
+            $('#loading').css("display", "block");
             addTosheet(name, dt, item, price);
         }
 
@@ -630,6 +642,8 @@
             }).done(function () {
 
                 console.log('OK');
+                $('#modal-item').val('');
+                $('#display').val('')
                 $('#exampleModalCenter').modal('hide')
                 initObject();
                 $('#loading').css("display", "none");
