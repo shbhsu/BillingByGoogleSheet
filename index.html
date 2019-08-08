@@ -455,8 +455,8 @@
                     <div class="modal-content">
 
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">新增支出</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <h5 class="modal-title" style="float:left" id="exampleModalLabel">新增支出</h5>
+                            <button type="button" style="float:right" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -473,6 +473,25 @@
                                 <input type="text" class="form-control" id="modal-item">
                             </div>
                             <div class="form-group">
+                                <button type="button" class="btn btn-sm  btn-danger "  onclick='$("#modal-item").val("早餐") '>早餐</button>
+                                <button type="button" class="btn btn-sm  btn-danger "  onclick='$("#modal-item").val("午餐") '>午餐</button>
+                                <button type="button" class="btn btn-sm  btn-danger "  onclick='$("#modal-item").val("晚餐") '>晚餐</button>
+                                <button type="button" class="btn btn-sm  btn-danger "  onclick='$("#modal-item").val("點心") '>點心</button>
+                                <button type="button" class="btn btn-sm  btn-danger "  onclick='$("#modal-item").val("宵夜") '>宵夜</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-sm  btn-info "  onclick='$("#modal-item").val("生活用品") '>生活用品</button>
+                                <button type="button" class="btn btn-sm  btn-info "  onclick='$("#modal-item").val("交通") '>交通</button>
+                                <button type="button" class="btn btn-sm  btn-info "  onclick='$("#modal-item").val("娛樂") '>娛樂</button>
+                                <button type="button" class="btn btn-sm  btn-info "  onclick='$("#modal-item").val("洗頭") '>洗頭</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-sm  btn-warning "  onclick='$("#modal-item").val("水費") '>水費</button>
+                                <button type="button" class="btn btn-sm  btn-warning "  onclick='$("#modal-item").val("電費") '>電費</button>
+                                <button type="button" class="btn btn-sm  btn-warning "  onclick='$("#modal-item").val("瓦斯費") '>瓦斯費</button>
+                                <button type="button" class="btn btn-sm  btn-warning "  onclick='$("#modal-item").val("手機費") '>手機費</button>
+                            </div>
+                            <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">金額:</label>
 
                                 <form name="calculator">
@@ -483,37 +502,37 @@
                                     <div class="row">
                                         <div class='col-xs-12'>
                                             <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="1" onclick="calculator.display.value += '1'">1</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="2" onclick="calculator.display.value += '2'">2</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="3" onclick="calculator.display.value += '3'">3</button>
-                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" value="+" onclick="calculator.display.value += '+'">+</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="1" onclick="calculator.display.value += '1'">1</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="2" onclick="calculator.display.value += '2'">2</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="3" onclick="calculator.display.value += '3'">3</button>
+                                                <button type="button" class="btn btn-sm  btn-primary  btn-calc" value="+" onclick="calculator.display.value += '+'">+</button>
 
                                             </div>
                                         </div>
                                         <div class='col-xs-12'>
                                             <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="4" onclick="calculator.display.value += '4'">4</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="5" onclick="calculator.display.value += '5'">5</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="6" onclick="calculator.display.value += '6'">6</button>
-                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" value="-" onclick="calculator.display.value += '-'">-</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="4" onclick="calculator.display.value += '4'">4</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="5" onclick="calculator.display.value += '5'">5</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="6" onclick="calculator.display.value += '6'">6</button>
+                                                <button type="button" class="btn btn-sm  btn-primary  btn-calc" value="-" onclick="calculator.display.value += '-'">-</button>
 
                                             </div>
                                         </div>
                                         <div class='col-xs-12'>
                                             <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="7" onclick="calculator.display.value += '7'">7</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="8" onclick="calculator.display.value += '8'">8</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="9" onclick="calculator.display.value += '9'">9</button>
-                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" value="x" onclick="calculator.display.value += '*'">x</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="7" onclick="calculator.display.value += '7'">7</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="8" onclick="calculator.display.value += '8'">8</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="9" onclick="calculator.display.value += '9'">9</button>
+                                                <button type="button" class="btn btn-sm  btn-primary  btn-calc" value="x" onclick="calculator.display.value += '*'">x</button>
 
                                             </div>
                                         </div>
                                         <div class='col-xs-12'>
                                             <div class="btn-group" role="group" style="width: 100%;" aria-label="calc1">
-                                                <button type="button" id="clear" name="clear" class="btn btn-lg  btn-info  btn-calc" value="c" onclick="calculator.display.value = ''">c</button>
-                                                <button type="button" class="btn btn-lg  btn-default btn-calc" value="0" onclick="calculator.display.value += '0'">0</button>
-                                                <button type="button" class="btn btn-lg  btn-info  btn-calc" name="doit" value="=" onclick="calculator.display.value = eval(calculator.display.value)">=</button>
-                                                <button type="button" class="btn btn-lg  btn-primary  btn-calc" name="div" value="/" onclick="calculator.display.value += '/'">/</button>
+                                                <button type="button" id="clear" name="clear" class="btn btn-sm  btn-info  btn-calc" value="c" onclick="calculator.display.value = ''">c</button>
+                                                <button type="button" class="btn btn-sm  btn-default btn-calc" value="0" onclick="calculator.display.value += '0'">0</button>
+                                                <button type="button" class="btn btn-sm  btn-info  btn-calc" name="doit" value="=" onclick="calculator.display.value = eval(calculator.display.value)">=</button>
+                                                <button type="button" class="btn btn-sm  btn-primary  btn-calc" name="div" value="/" onclick="calculator.display.value += '/'">/</button>
 
                                             </div>
                                         </div>
