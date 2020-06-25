@@ -263,8 +263,22 @@
 
             });
 
-        });
+            refreshRecentItem();
 
+        });
+        function refreshRecentItem() {
+            var recentItem = JSON.parse(localStorage.getItem('recentItem'));
+            if (recentItem) {
+                $('#addTabRecent').html('');
+                recentItem.reverse().map(x => {
+                    $('#addTabRecent').append(`
+                    <button type="button" class="btn btn-md  btn-info "
+                     onclick='$("#modal-item").val("${x}") '>${x}</button>
+                    `)
+                })
+            }
+
+        }
 
 
     </script>
@@ -448,7 +462,8 @@
             <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document" style="margin: 0px;">
+                <div class="modal-dialog modal-dialog-centered" role="document"
+                    style="justify-content: center; align-items: center;">
                     <div class="modal-content">
 
                         <div class="modal-header">
@@ -487,82 +502,123 @@
 
 
                             </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-md  btn-danger "
-                                    onclick='$("#modal-item").val("早餐") '>早餐</button>
-                                <button type="button" class="btn btn-md  btn-danger "
-                                    onclick='$("#modal-item").val("午餐") '>午餐</button>
-                                <button type="button" class="btn btn-md  btn-danger "
-                                    onclick='$("#modal-item").val("晚餐") '>晚餐</button>
-                                <button type="button" class="btn btn-md  btn-danger "
-                                    onclick='$("#modal-item").val("點心") '>點心</button>
-                                <button type="button" class="btn btn-md  btn-danger "
-                                    onclick='$("#modal-item").val("宵夜") '>宵夜</button>
+                            <div class="Rabgne_tab">
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a href="#AddRtab1">最近新增</a>
+                                    </li>
+                                    <li>
+                                        <a href="#AddRtab2">日常</a>
+                                    </li>
+                                    <li>
+                                        <a href="#AddRtab3">生活</a>
+                                    </li>
+                                    <li>
+                                        <a href="#AddRtab4">娛樂</a>
+                                    </li>
+
+                                </ul>
+                                <div class="tab_container" style="border-style: double; border-color: #c5d0dc;">
+
+                                    <div id="AddRtab1" class="tab_content">
+                                        <div class="addTab" id="addTabRecent">
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <div id="AddRtab2" class="tab_content">
+                                        <div class="addTab">
+                                            <button type="button" class="btn btn-md  btn-danger "
+                                                onclick='$("#modal-item").val("早餐") '>早餐</button>
+                                            <button type="button" class="btn btn-md  btn-danger "
+                                                onclick='$("#modal-item").val("午餐") '>午餐</button>
+                                            <button type="button" class="btn btn-md  btn-danger "
+                                                onclick='$("#modal-item").val("晚餐") '>晚餐</button>
+                                            <button type="button" class="btn btn-md  btn-danger "
+                                                onclick='$("#modal-item").val("點心") '>點心</button>
+                                            <button type="button" class="btn btn-md  btn-danger "
+                                                onclick='$("#modal-item").val("宵夜") '>宵夜</button>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div id="AddRtab3" class="tab_content">
+                                        <div class="addTab">
+                                            <button type="button" class="btn btn-md  btn-warning "
+                                                onclick='$("#modal-item").val("生活用品") '>生活用品</button>
+                                            <button type="button" class="btn btn-md  btn-warning "
+                                                onclick='$("#modal-item").val("水費") '>水費</button>
+                                            <button type="button" class="btn btn-md  btn-warning "
+                                                onclick='$("#modal-item").val("電費") '>電費</button>
+                                            <button type="button" class="btn btn-md  btn-warning "
+                                                onclick='$("#modal-item").val("瓦斯費") '>瓦斯費</button>
+                                            <button type="button" class="btn btn-md  btn-warning "
+                                                onclick='$("#modal-item").val("手機費") '>手機費</button>
+                                            <button type="button" class="btn btn-md  btn-warning "
+                                                onclick='$("#modal-item").val("交通") '>交通</button>
+
+                                        </div>
+                                    </div>
+                                    <div id="AddRtab4" class="tab_content">
+                                        <div class="addTab">
+                                            <button type="button" class="btn btn-md  btn-info "
+                                                onclick='$("#modal-item").val("娛樂") '>娛樂</button>
+                                            <button type="button" class="btn btn-md  btn-info "
+                                                onclick='$("#modal-item").val("美容") '>美容</button>
+                                            <button type="button" class="btn btn-md  btn-info "
+                                                onclick='$("#modal-item").val("醫療") '>醫療</button>
+                                            <button type="button" class="btn btn-md  btn-info "
+                                                onclick='$("#modal-item").val("育兒") '>育兒</button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                             </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-md  btn-info "
-                                    onclick='$("#modal-item").val("生活用品") '>生活用品</button>
 
-                                <button type="button" class="btn btn-md  btn-info "
-                                    onclick='$("#modal-item").val("娛樂") '>娛樂</button>
-                                <button type="button" class="btn btn-md  btn-info "
-                                    onclick='$("#modal-item").val("美容") '>美容</button>
-                                <button type="button" class="btn btn-md  btn-info "
-                                    onclick='$("#modal-item").val("醫療") '>醫療</button>
-                                <button type="button" class="btn btn-md  btn-info "
-                                    onclick='$("#modal-item").val("育兒") '>育兒</button>
-
-
-
-                            </div>
                             <div class="form-group" style="overflow-y: auto;">
-                                <button type="button" class="btn btn-md  btn-warning "
-                                    onclick='$("#modal-item").val("水費") '>水費</button>
-                                <button type="button" class="btn btn-md  btn-warning "
-                                    onclick='$("#modal-item").val("電費") '>電費</button>
-                                <button type="button" class="btn btn-md  btn-warning "
-                                    onclick='$("#modal-item").val("瓦斯費") '>瓦斯費</button>
-                                <button type="button" class="btn btn-md  btn-warning "
-                                    onclick='$("#modal-item").val("手機費") '>手機費</button>
-                                <button type="button" class="btn btn-md  btn-warning "
-                                    onclick='$("#modal-item").val("交通") '>交通</button>
+
                             </div>
 
                         </div>
                         <div></div>
                         <div class="form-group">
                             <form name="calculator">
-                                <div class="row">
-                                    <div class="col-xs-9">
-                                        <input type="text" class="form-control dollarShow" name="display"
-                                            placeholder="$" id="display" disabled>
 
-                                    </div>
-                                    <div class="col-xs-3 calcResult">
-                                        <div id="calcResult"></div>
-                                    </div>
-                                </div>
 
                                 <table class="buttonTable">
                                     <tr>
+                                        <td colspan="3" style="width: 75%;">
+                                            <div style="width:100%;">
+                                                <input type="text" class="form-control dollarShow" name="display"
+                                                    placeholder="$" id="display" disabled>
+                                            </div>
+                                        </td>
                                         <td>
+                                            <div class="calcResult" id="calcResult"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 25%;">
                                             <button type="button" class="btn btn-md  btn-default btn-calc" value="1"
                                                 onclick="calcAdd('1')">1</button>
                                         </td>
-                                        <td>
+                                        <td style="width: 25%;">
                                             <button type="button" class="btn btn-md  btn-default btn-calc" value="2"
                                                 onclick="calcAdd('2')">2</button>
                                         </td>
-                                        <td>
+                                        <td style="width: 25%;">
                                             <button type="button" class="btn btn-md  btn-default btn-calc" value="3"
                                                 onclick="calcAdd('3')">3</button>
                                         </td>
-                                        <td rowspan="2">
+                                        <td style="width: 25%;">
                                             <button type="button" class="btn btn-md  btn-default  btn-calc clearfix "
-                                                style="height: 90px;" value="+" onclick="calcAdd('+')">+</button>
-
-
-
+                                                value="-" onclick="calcAdd('-')">-</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -577,6 +633,10 @@
                                         <td>
                                             <button type="button" class="btn btn-md  btn-default btn-calc" value="3"
                                                 onclick="calcAdd('6')">6</button>
+                                        </td>
+                                        <td style="width: 25%;">
+                                            <button type="button" class="btn btn-md  btn-default  btn-calc clearfix "
+                                                value="+" onclick="calcAdd('+')">+</button>
                                         </td>
 
                                     </tr>
@@ -728,6 +788,20 @@
             }
             $('#loading').css("display", "flex");
             addTosheet(name, dt, item, price);
+            var recentItem = JSON.parse(localStorage.getItem('recentItem'));
+            if (recentItem) {
+                if (!recentItem.includes(`${item}`))
+                    localStorage.setItem('recentItem', JSON.stringify([...recentItem, `${item}`]));
+                else {
+                    recentItem.push(recentItem.splice(recentItem.indexOf(`${item}`), 1)[0]);
+                    localStorage.setItem('recentItem', JSON.stringify([...recentItem]));
+                }
+            }
+            else {
+                localStorage.setItem('recentItem', JSON.stringify([`${item}`]));
+            }
+            calcClear();
+            refreshRecentItem();
         }
         function calcAdd(value) {
             if (calculator.display.value[calculator.display.value.length - 1] == "+" && value == "+") {
@@ -746,8 +820,7 @@
             if (calculator.display.value[calculator.display.value.length - 1] == "+") {
                 $('#calcResult').html("$" + eval(calculator.display.value.substring(0, calculator.display.value.length - 1)));
             }
-            else if(calculator.display.value.length == 0)
-            {
+            else if (calculator.display.value.length == 0) {
                 calcClear();
             }
             else
@@ -813,6 +886,12 @@
             font-weight: bold;
             color: #cd403c;
             vertical-align: bottom;
+        }
+
+        .addTab {
+            min-height: 150px;
+            margin: 10px;
+            line-height: 40px;
         }
     </style>
 
