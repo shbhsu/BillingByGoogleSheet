@@ -766,6 +766,9 @@
             setCookie('sheetkey', $('#modal-sheetkey').val(), 40000);
             setCookie('secret', $('#modal-secret').val(), 40000);
             setCookie('username', $('#modal-name').val(), 40000);
+            localStorage.setItem('sheetkey', $('#modal-sheetkey').val());
+            localStorage.setItem('secret', $('#modal-secret').val());
+            localStorage.setItem('username', $('#modal-name').val());
 
             $('#keyModalCenter').modal('hide');
             initObject();
