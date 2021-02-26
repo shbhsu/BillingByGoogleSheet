@@ -263,23 +263,94 @@
 
             });
 
-            refreshRecentItem();
-
+            refreshMyTab01();
+            refreshMyTab02();
         });
-        function refreshRecentItem() {
-            var recentItem = JSON.parse(localStorage.getItem('recentItem'));
-            if (recentItem) {
-                $('#addTabRecent').html('');
-                recentItem.reverse().map(x => {
-                    $('#addTabRecent').append(`
-                    <button type="button" class="btn btn-md  btn-info "
+
+
+        function AddToMyTab01() {
+            var inputMytab01 = $('#inputMytab01').val();
+            if (inputMytab01) {
+                var MyTab01 = JSON.parse(localStorage.getItem('MyTab01'));
+                if (MyTab01 == null)
+                    MyTab01 = [];
+                localStorage.setItem('MyTab01', JSON.stringify([...MyTab01, `${inputMytab01}`]));
+                refreshMyTab01();
+                $('#inputMytab01').val('');
+            }
+        }
+
+        function refreshMyTab01() {
+            var MyTab01 = JSON.parse(localStorage.getItem('MyTab01'));
+            if (MyTab01) {
+                $('#addMyTab01').html('');
+                MyTab01.reverse().map(x => {
+                    $('#addMyTab01').append(`
+                    <button type="button" onmousedown="func('${x}','MyTab01')" onmouseup="revert()"  class="btn btn-md  btn-warning "
                      onclick='$("#modal-item").val("${x}") '>${x}</button>
                     `)
                 })
             }
-
         }
 
+        function AddToMyTab02() {
+            var inputMytab02 = $('#inputMytab02').val();
+            if (inputMytab02) {
+                var MyTab02 = JSON.parse(localStorage.getItem('MyTab02'));
+                if (MyTab02 == null)
+                    MyTab02 = [];
+                localStorage.setItem('MyTab02', JSON.stringify([...MyTab02, `${inputMytab02}`]));
+                refreshMyTab02();
+                $('#inputMytab02').val('');
+            }
+        }
+
+        function refreshMyTab02() {
+            var MyTab02 = JSON.parse(localStorage.getItem('MyTab02'));
+            if (MyTab02) {
+                $('#addMyTab02').html('');
+                MyTab02.reverse().map(x => {
+                    $('#addMyTab02').append(`
+                    <button type="button" onmousedown="func('${x}','MyTab02')" onmouseup="revert()"  class="btn btn-md  btn-info "
+                     onclick='$("#modal-item").val("${x}") '>${x}</button>
+                    `)
+                })
+            }
+        }
+
+        var timer;
+        var istrue = false;
+        var delay = 2000; // how much long u have to hold click in MS
+        function func(text, tabid) {
+            istrue = true;
+            timer = setTimeout(function () { makeChange(text, tabid); }, delay);
+        }
+
+        function makeChange(text, tabid) {
+            if (timer)
+                clearTimeout(timer);
+
+            if (istrue) {
+                /// rest of your code
+                if (window.confirm(`是否刪除${text}?`)) {
+                    var MyTab = JSON.parse(localStorage.getItem(tabid));
+                    var newTab = MyTab.filter(x => x != text);
+                    if (newTab.length == 0) {
+                        localStorage.setItem(tabid, JSON.stringify([]));
+                    }
+                    else {
+                        localStorage.setItem(tabid, JSON.stringify([...newTab]));
+
+                    }
+                    refreshMyTab01();
+                    refreshMyTab02();
+                }
+
+            }
+        }
+        function revert() {
+            istrue = false;
+        }
 
     </script>
 
@@ -498,14 +569,15 @@
                                         <input type="text" class="form-control" id="modal-item">
                                     </div>
                                 </div>
-
-
-
                             </div>
                             <div class="Rabgne_tab">
                                 <ul class="nav nav-tabs">
+
                                     <li>
-                                        <a href="#AddRtab1">最近新增</a>
+                                        <a href="#MyTab01">自訂1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#MyTab02">自訂2</a>
                                     </li>
                                     <li>
                                         <a href="#AddRtab2">日常</a>
@@ -520,10 +592,48 @@
                                 </ul>
                                 <div class="tab_container" style="border-style: double; border-color: #c5d0dc;">
 
-                                    <div id="AddRtab1" class="tab_content">
-                                        <div class="addTab" id="addTabRecent">
+
+                                    <div id="MyTab01" class="tab_content">
+                                        <div class="addTab" id="MyAddTab01">
+
+                                            <div class="form-group" style="margin-bottom: 0px;">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="inputMytab01"
+                                                                placeholder="輸入自訂項目" style="top:3px;">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-danger" type="button"
+                                                                    onclick="AddToMyTab01()">Add</button>
+                                                            </span>
+                                                        </div><!-- /input-group -->
+                                                    </div><!-- /.col-lg-6 -->
+                                                </div>
+                                            </div>
+                                            <div id="addMyTab01"></div>
+                                        </div>
 
 
+                                    </div>
+
+                                    <div id="MyTab02" class="tab_content">
+                                        <div class="addTab" id="MyAddTab02">
+
+                                            <div class="form-group" style="margin-bottom: 0px;">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="inputMytab02"
+                                                                placeholder="輸入自訂項目" style="top:3px;">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-danger" type="button"
+                                                                    onclick="AddToMyTab02()">Add</button>
+                                                            </span>
+                                                        </div><!-- /input-group -->
+                                                    </div><!-- /.col-lg-6 -->
+                                                </div>
+                                            </div>
+                                            <div id="addMyTab02"></div>
                                         </div>
 
 
@@ -791,20 +901,8 @@
             }
             $('#loading').css("display", "flex");
             addTosheet(name, dt, item, price);
-            var recentItem = JSON.parse(localStorage.getItem('recentItem'));
-            if (recentItem) {
-                if (!recentItem.includes(`${item}`))
-                    localStorage.setItem('recentItem', JSON.stringify([...recentItem, `${item}`]));
-                else {
-                    recentItem.push(recentItem.splice(recentItem.indexOf(`${item}`), 1)[0]);
-                    localStorage.setItem('recentItem', JSON.stringify([...recentItem]));
-                }
-            }
-            else {
-                localStorage.setItem('recentItem', JSON.stringify([`${item}`]));
-            }
+
             calcClear();
-            refreshRecentItem();
         }
         function calcAdd(value) {
             if (calculator.display.value[calculator.display.value.length - 1] == "+" && value == "+") {
