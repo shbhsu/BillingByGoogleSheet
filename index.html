@@ -99,7 +99,7 @@
             try {
                 var url = window.location.href;
                 var key = getCookie('sheetkey');
-                var sql = "select A,B,C,D where  A >=date'" + $('#SDT').val() + "' AND A<=date'" + moment($('#EDT').val()).add(1, 'd').format('YYYY-MM-DD') + "'";
+                var sql = "select A,B,C,D,E where  A >=date'" + $('#SDT').val() + "' AND A<=date'" + moment($('#EDT').val()).add(1, 'd').format('YYYY-MM-DD') + "'";
                 googleURL = decodeURIComponent("https://docs.google.com/spreadsheets/d/" + key + "/gviz/tq?tqx=out:html&gid=0&tq=" + sql);
                 console.log(googleURL)
                 return new XMLHttpRequest();
@@ -132,7 +132,6 @@
                 tableHTML = tableHTML.replace(thead, "");
                 tableHTML = tableHTML.replace(" cellspacing=\"0\">", " cellspacing='0'><thead>" + thead + "</thead>");
 
-
                 $('#tableList').html(tableHTML.replace("<table", "<table id='TableResult' class='table table- striped' width='100%' "));
 
 
@@ -142,9 +141,10 @@
 
                 table = $table.tableToJSON();
                 var newTable = $.map(table, function (e) {
+                    console.log(e, 'eee')
+                    e.ID = 'AAAA'
                     return (e.FirstName == "日期") ? null : e;
                 });
-
                 var grphDates = new Array();
                 var groupedObjects = new Array();
                 $.each(table, function (ix, obj) {
@@ -154,9 +154,7 @@
                         var index = groupedObjects.map(function (o, i) {
                             if (o.項目 == obj.項目) return i;
                         }).filter(isFinite);
-
                         groupedObjects[index].金額 = (parseInt(groupedObjects[index].金額 || 0) + parseInt(obj.金額)).toString();
-
                     } else {
                         groupedObjects.push(obj);
                         grphDates.push(obj.項目);
@@ -210,7 +208,10 @@
                 });
 
 
-                $('#TableResult').DataTable();
+                $('#TableResult').DataTable({
+                });
+
+               
             };
         }
 
@@ -443,7 +444,7 @@
                                 </div>
                                 <hr />
                                 <div id="tableList"></div>
-
+                                <div id="tableList1"></div>
                                 <hr />
 
 
@@ -565,8 +566,11 @@
                                     <div class="col-xs-3" style="text-align: right;">
                                         <label for="recipient-name" class="col-form-label">項目:</label>
                                     </div>
-                                    <div class="col-xs-9">
+                                    <div class="col-xs-7">
                                         <input type="text" class="form-control" id="modal-item">
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <input type="checkbox" class="form-control" id="modal-item-credit">
                                     </div>
                                 </div>
                             </div>
@@ -585,7 +589,7 @@
                                     <li>
                                         <a href="#AddRtab3">生活娛樂</a>
                                     </li>
-                                
+
 
                                 </ul>
                                 <div class="tab_container" style="border-style: double; border-color: #c5d0dc;">
@@ -668,7 +672,7 @@
                                                 onclick='$("#modal-item").val("手機費") '>手機費</button>
                                             <button type="button" class="btn btn-md  btn-warning "
                                                 onclick='$("#modal-item").val("交通") '>交通</button>
-                                                <button type="button" class="btn btn-md  btn-info "
+                                            <button type="button" class="btn btn-md  btn-info "
                                                 onclick='$("#modal-item").val("娛樂") '>娛樂</button>
                                             <button type="button" class="btn btn-md  btn-info "
                                                 onclick='$("#modal-item").val("美容") '>美容</button>
@@ -678,7 +682,7 @@
                                                 onclick='$("#modal-item").val("育兒") '>育兒</button>
                                         </div>
                                     </div>
-                                    
+
 
                                 </div>
 
@@ -883,7 +887,7 @@
             var dt = moment($('#modal-date').val()).format('YYYY-MM-DD HH:mm');
             var item = $('#modal-item').val();
             var price = eval($('#display').val());
-
+            var iscredit = $('#modal-item-credit').is(":checked");
             if (price == '' || price == null) {
                 alert('請輸入金額');
                 return;
@@ -893,7 +897,7 @@
                 return;
             }
             $('#loading').css("display", "flex");
-            addTosheet(name, dt, item, price);
+            addTosheet(name, dt, item, price, iscredit);
 
             calcClear();
         }
@@ -922,7 +926,7 @@
         }
 
         //add to google sheet
-        let addTosheet = (name, date, item, price) => {
+        let addTosheet = (name, date, item, price, isCredit) => {
 
             var addsecret = getCookie('secret');;
 
@@ -933,7 +937,32 @@
                     "name": name,
                     "date": date + ':00',
                     "item": item,
-                    "price": price
+                    "price": price,
+                    "isCredit": isCredit
+                },
+                url: 'https://script.google.com/macros/s/' + addsecret + '/exec'// 填入網路應用程式網址
+            }).done(function () {
+
+                console.log('OK');
+                $('#modal-item').val('');
+                $('#display').val('')
+                $('#exampleModalCenter').modal('hide')
+                initObject();
+                $('#loading').css("display", "none");
+            });
+
+
+        }
+
+        let deleteTosheet = (key) => {
+
+            var addsecret = getCookie('secret');;
+
+            $.ajax({
+                type: "post",
+                data: {
+                    "method": "delete",
+                    "key": key,
                 },
                 url: 'https://script.google.com/macros/s/' + addsecret + '/exec'// 填入網路應用程式網址
             }).done(function () {
