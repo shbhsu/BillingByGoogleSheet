@@ -26,6 +26,12 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/rowreorder/1.2.7/css/rowReorder.dataTables.min.css"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css"
+        crossorigin="anonymous"></script>
+
 
 
 
@@ -42,6 +48,10 @@
     <script src="js/datetme.js"></script>
     <script src="js/cookie.js"></script>
 
+
+    <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
+
     <script>
 
 
@@ -55,11 +65,11 @@
                     backdrop: "static",
                     keyboard: false
                 });
-                $('#modal-sheetkey').val(getCookie('sheetkey'))
-                $('#modal-secret').val(getCookie('secret'))
-                $('#modal-name').val(getCookie('username'))
-            }
 
+            }
+            $('#modal-sheetkey').val(getCookie('sheetkey'))
+            $('#modal-secret').val(getCookie('secret'))
+            $('#modal-name').val(getCookie('username'))
 
 
             $("#SDT").datetimepicker({
@@ -99,7 +109,7 @@
             try {
                 var url = window.location.href;
                 var key = getCookie('sheetkey');
-                var sql = "select A,B,C,D,E where  A >=date'" + $('#SDT').val() + "' AND A<=date'" + moment($('#EDT').val()).add(1, 'd').format('YYYY-MM-DD') + "'";
+                var sql = "select A,B,C,D,E,F where  A >=date'" + $('#SDT').val() + "' AND A<=date'" + moment($('#EDT').val()).add(1, 'd').format('YYYY-MM-DD') + "'";
                 googleURL = decodeURIComponent("https://docs.google.com/spreadsheets/d/" + key + "/gviz/tq?tqx=out:html&gid=0&tq=" + sql);
                 console.log(googleURL)
                 return new XMLHttpRequest();
@@ -125,9 +135,8 @@
             var total;
 
             request.onreadystatechange = function () {
-                if (request.readyState == 4)
 
-                    tableHTML = (request.responseText).substring(request.responseText.indexOf("<table"), request.responseText.indexOf("</table")) + "</table>";
+                tableHTML = (request.responseText).substring(request.responseText.indexOf("<table"), request.responseText.indexOf("</table")) + "</table>";
                 var thead = tableHTML.substring(tableHTML.indexOf("<tr"), tableHTML.indexOf("</tr")) + "</tr>";
                 tableHTML = tableHTML.replace(thead, "");
                 tableHTML = tableHTML.replace(" cellspacing=\"0\">", " cellspacing='0'><thead>" + thead + "</thead>");
@@ -140,13 +149,13 @@
                 var $table = $('#TableResult');
 
                 table = $table.tableToJSON();
+                console.log(table, 'table')
                 var newTable = $.map(table, function (e) {
-                    console.log(e, 'eee')
-                    e.ID = 'AAAA'
                     return (e.FirstName == "日期") ? null : e;
                 });
                 var grphDates = new Array();
                 var groupedObjects = new Array();
+                var newDataTable = [];
                 $.each(table, function (ix, obj) {
                     var existingObj;
                     if ($.inArray(obj.項目, grphDates) >= 0) {
@@ -160,9 +169,18 @@
                         grphDates.push(obj.項目);
 
                     }
+                    newDataTable.push([
+                        moment(obj.日期).format('YYYY-MM-DD hh:mm'),
+                        obj.暱稱,
+                        obj.項目,
+                        obj.刷卡,
+                        "$" + obj.金額,
+                        `<a onclick='deleteTosheet(${obj.ID})'><span class="glyphicon glyphicon-trash" aria-hidden="true"> </span> </a>`,
 
+                    ]);
 
                 });
+                console.log(newDataTable, 'newDataTable')
 
                 $.each(groupedObjects, function (ix, obj) {
                     total = (parseInt(total) || 0) + (parseInt(obj.金額));
@@ -209,9 +227,31 @@
 
 
                 $('#TableResult').DataTable({
+                    data: newDataTable,
+                    columns: [
+                        { title: "日期" },
+                        { title: "暱稱" },
+                        { title: "項目" },
+                        { title: "刷卡" },
+                        { title: "金額" },
+                        { title: "刪除" },
+                    ],
+                    rowReorder: {
+                        selector: 'td:nth-child(2)',
+
+                    },
+                    responsive: true,
+                    columnDefs: [
+                        { responsivePriority: 1 },
+                        { responsivePriority: 2 },
+                        { responsivePriority: 3 },
+                        { responsivePriority: 4 },
+                        { responsivePriority: 50000 },
+                        { responsivePriority: 60000 }
+                    ]
                 });
 
-               
+
             };
         }
 
@@ -287,7 +327,7 @@
                 $('#addMyTab01').html('');
                 MyTab01.reverse().map(x => {
                     $('#addMyTab01').append(`
-                    <button type="button" onmousedown="func('${x}','MyTab01')" onmouseup="revert()"  class="btn btn-md  btn-warning "
+                    <button type="button" onmousedown="func('${x}','MyTab01')" ontouchstart="func('${x}','MyTab01')" onmouseup="revert()" ontouchend="revert()"  class="btn btn-md  btn-warning "
                      onclick='$("#modal-item").val("${x}") '>${x}</button>
                     `)
                 })
@@ -312,7 +352,7 @@
                 $('#addMyTab02').html('');
                 MyTab02.reverse().map(x => {
                     $('#addMyTab02').append(`
-                    <button type="button" onmousedown="func('${x}','MyTab02')" onmouseup="revert()"  class="btn btn-md  btn-info "
+                    <button type="button" onmousedown="func('${x}','MyTab02')" ontouchstart="func('${x}','MyTab02')" onmouseup="revert()" ontouchend="revert()" class="btn btn-md  btn-info "
                      onclick='$("#modal-item").val("${x}") '>${x}</button>
                     `)
                 })
@@ -360,14 +400,36 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">記帳本</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <!-- <li><a  data-toggle="modal" data-target="#keyModalCenter"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Shortcut Setting</a></li> -->
+                    <li><a data-toggle="modal" data-target="#keyModalCenter"> <span class="glyphicon glyphicon-cog"
+                                aria-hidden="true"></span> Hosts Setting </a></li>
+                </ul>
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
     <main role="main">
 
 
         <div class="container">
-            <div class="page-header">
-                <h3>支出紀錄</h3>
 
-            </div>
             <button type="button" class="btn-lg btn-danger"
                 style="position:fixed;bottom: 25px;right: 15px;z-index: 99; border-radius: 25px;" data-toggle="modal"
                 data-target="#exampleModalCenter">
@@ -815,7 +877,7 @@
                     <div class="modal-content">
 
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">第一次設定</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">設定</h5>
 
                         </div>
 
@@ -870,15 +932,18 @@
     <script>
 
         function saveSetting() {//第一次設定
-            setCookie('sheetkey', $('#modal-sheetkey').val(), 40000);
-            setCookie('secret', $('#modal-secret').val(), 40000);
-            setCookie('username', $('#modal-name').val(), 40000);
-            localStorage.setItem('sheetkey', $('#modal-sheetkey').val());
-            localStorage.setItem('secret', $('#modal-secret').val());
-            localStorage.setItem('username', $('#modal-name').val());
+            if (window.confirm('確定儲存?')) {
+                setCookie('sheetkey', $('#modal-sheetkey').val(), 40000);
+                setCookie('secret', $('#modal-secret').val(), 40000);
+                setCookie('username', $('#modal-name').val(), 40000);
+                localStorage.setItem('sheetkey', $('#modal-sheetkey').val());
+                localStorage.setItem('secret', $('#modal-secret').val());
+                localStorage.setItem('username', $('#modal-name').val());
 
-            $('#keyModalCenter').modal('hide');
-            initObject();
+                $('#keyModalCenter').modal('hide');
+                initObject();
+            }
+
         }
 
         function submitCalc() {
@@ -954,26 +1019,57 @@
 
         }
 
-        let deleteTosheet = (key) => {
+        //add to google sheet
+        let ReadSheet = () => {
 
             var addsecret = getCookie('secret');;
 
             $.ajax({
                 type: "post",
                 data: {
-                    "method": "delete",
-                    "key": key,
+                    "method": "read",
+
                 },
                 url: 'https://script.google.com/macros/s/' + addsecret + '/exec'// 填入網路應用程式網址
-            }).done(function () {
+            }).done(function (result) {
 
-                console.log('OK');
-                $('#modal-item').val('');
-                $('#display').val('')
-                $('#exampleModalCenter').modal('hide')
-                initObject();
-                $('#loading').css("display", "none");
+                console.log(result, 'OK');
+
             });
+
+
+        }
+
+        let deleteTosheet = (key) => {
+
+            var addsecret = getCookie('secret');;
+            $('#loading').css("display", "flex");
+            if (window.confirm('確定要刪除?')) {
+
+                $.ajax({
+                    type: "post",
+                    data: {
+                        "method": "delete",
+                        "key": key,
+                    },
+                    url: 'https://script.google.com/macros/s/' + addsecret + '/exec'// 填入網路應用程式網址
+                }).done(function () {
+
+                    console.log('OK');
+                    $('#modal-item').val('');
+                    $('#display').val('')
+                    $('#exampleModalCenter').modal('hide')
+                    initObject();
+                    $('#loading').css("display", "none");
+                }).error((e) => {
+                    initObject();
+                    console.log(123, e)
+                    $('#loading').css("display", "none");
+                });
+            }
+            else {
+                $('#loading').css("display", "none");
+            }
 
 
         }
