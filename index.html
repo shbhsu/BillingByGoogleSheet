@@ -135,7 +135,7 @@
             var total;
 
             request.onreadystatechange = function () {
-
+                if (request.readyState == 4)
                 tableHTML = (request.responseText).substring(request.responseText.indexOf("<table"), request.responseText.indexOf("</table")) + "</table>";
                 var thead = tableHTML.substring(tableHTML.indexOf("<tr"), tableHTML.indexOf("</tr")) + "</tr>";
                 tableHTML = tableHTML.replace(thead, "");
@@ -230,25 +230,25 @@
                     data: newDataTable,
                     columns: [
                         { title: "日期" },
-                        { title: "暱稱" },
+                        { title: "暱稱" ,responsivePriority: 30000},
                         { title: "項目" },
-                        { title: "刷卡" },
+                        { title: "刷卡" ,responsivePriority: 40000 },
                         { title: "金額" },
-                        { title: "刪除" },
+                        { title: "刪除" ,responsivePriority: 60000},
                     ],
                     rowReorder: {
                         selector: 'td:nth-child(2)',
 
                     },
                     responsive: true,
-                    columnDefs: [
-                        { responsivePriority: 1 },
-                        { responsivePriority: 20000 },
-                        { responsivePriority: 3 },
-                        { responsivePriority: 40000 },
-                        { responsivePriority: 5 },
-                        { responsivePriority: 60000 }
-                    ]
+                    // columnDefs: [
+                    //     { responsivePriority: 1 },
+                    //     { responsivePriority: 20000 },
+                    //     { responsivePriority: 3 },
+                    //     { responsivePriority: 40000 },
+                    //     { responsivePriority: 5 },
+                    //     { responsivePriority: 60000 }
+                    // ]
                 });
 
 
